@@ -80,9 +80,9 @@ const sessionOptions={
 
 
 
-// app.get("/",(req,res)=>{
-//     res.send("Working");
-// });
+app.get("/",(req,res)=>{
+    res.render("./listings/index.ejs");
+});
 
 
 
