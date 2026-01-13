@@ -88,15 +88,20 @@
         <% for (let review of listing.reviews ) { %>
             <div class="card col-5 ms-3 mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">@<%= review.author.username%></h5>
+                    <h5 class="card-title mt-2">@<%= review.author.username%></h5>
                     <p class="starability-result card-text" data-rating="<%= review.rating %>">
                     </p>
                     <p class="card-text">
                         <%= review.comment %>
                     </p>
-                <form action="/listings/<%= listing._id %>/reviews/<%= review._id  %>?_method=DELETE" class="mb-2" method="post">
-                    <button class="btn btn-dark btn-sm">Delete</button>
-                </form>
+                        <form action="/listings/<%= listing._id %>/reviews/<%= review._id  %>?_method=DELETE" class="mb-2" method="post">
+                         <% if (currUser && currUser._id.equals(review.author._id)) { %>
+
+                            <button class="btn btn-dark btn-sm">Delete</button>
+                        <% } %>
+
+                        </form>
+
                 </div>
             </div>
         <% } %>
