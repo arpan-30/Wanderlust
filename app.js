@@ -2,6 +2,7 @@ if(process.env.NODE_ENV !="production"){
     require('dotenv').config();
 }
 
+const Listing=require("./models/listing.js");
 const express=require("express");
 const app=express();
 const path=require("path");
@@ -80,9 +81,6 @@ const sessionOptions={
 
 
 
-app.get("/",(req,res)=>{
-    res.render("./listings/index.ejs");
-});
 
 
 
@@ -120,6 +118,25 @@ app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",userRouter);
 
+app.get("/",async (req, res) => {
+    const { search } = req.query;
+
+    let allListings;
+
+    if (search) {
+        allListings = await Listing.find({
+            $or: [
+                // { title: { $regex: search, $options: "i" } },
+                { location: { $regex: search, $options: "i" } },
+                { country: { $regex: search, $options: "i" } }
+            ]
+        });
+    } else {
+        allListings = await Listing.find({});
+    }
+
+    res.render("./listings/index.ejs", { allListings, search });
+});
 
 app.use((req, res, next) => {
     next(new ExpressError(404, "Page Not Found!"));
